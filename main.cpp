@@ -1,9 +1,11 @@
 #include <iostream>
-#include <string>
 #include "FBullCowGame.h"
 
+using FText = std::string;
+using int32 = int;
+
 void PrintIntro();
-std::string GetGuess();
+FText GetGuess();
 void PlayGame();
 bool AskToPlayAgain();
 
@@ -24,31 +26,34 @@ int main() {
 
 bool AskToPlayAgain() {
     std::cout << "Do you want to play again?";
-    std::string response = "";
+    FText response = "";
     getline(std::cin, response);
     return response[0] == 'y' || response[0] == 'Y' ? true : false;
 }
 
 void PlayGame() {
     BCGame.Reset();
-    int MaxTries = BCGame.GetMaxTries();
-    std::cout << MaxTries;
+    int32 MaxTries = BCGame.GetMaxTries();
 
-    for(int count = 1; count <=MaxTries; count++){
-        std::string Guess = GetGuess();
+    for(int32 count = 1; count <=MaxTries; count++){
+        FText Guess = GetGuess();
+
+        FBullCowCount BullCowCount = BCGame.SubmitGuess(Guess);
+
+        std::cout << "Bulls: " << BullCowCount.Bulls << " Cows: " << BullCowCount.Cows << std::endl;
     }
-}
-
-void PrintIntro() {
-    constexpr int WORD_LENGTH = 5;
-    std::cout << "Welcome to Bulls and Cows\n";
-    std::cout << "Can you guess the " << WORD_LENGTH << " letter isogram I'm thinking of?\n";
     return;
 }
 
-std::string GetGuess(){
-    std::string WordGuess = "";
-    int CurrentTry = BCGame.GetCurrentTry();
+void PrintIntro() {
+    std::cout << "Welcome to Bulls and Cows\n";
+    std::cout << "Can you guess the " << BCGame.GetHiddenWordLength() << " letter isogram I'm thinking of?\n";
+    return;
+}
+
+FText GetGuess(){
+    FText WordGuess = "";
+    int32 CurrentTry = BCGame.GetCurrentTry();
     std::cout << "Try " << CurrentTry << " try.\n";
     getline(std::cin, WordGuess);
     return WordGuess;

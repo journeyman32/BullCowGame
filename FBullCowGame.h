@@ -3,24 +3,30 @@
 //
 #import <iostream>
 
-#ifndef BULLCOWGAME_FBULLCOWGAME_H
-#define BULLCOWGAME_FBULLCOWGAME_H
+using FString = std::string;
+using int32 = int;
 
+struct FBullCowCount{
+    int32 Bulls =0;
+    int32 Cows = 0;
+};
 
 class FBullCowGame {
 public:
     FBullCowGame();
-    int GetMaxTries() const;
-    int GetCurrentTry() const;
+    int32 GetMaxTries() const;
+    int32 GetCurrentTry() const;
     bool IsGameWon() const;
+    int32 GetHiddenWordLength() const;
     void Reset();
-    bool CheckGuessValidity(std::string);
+    bool CheckGuessValidity(FString) const;
+    FBullCowCount SubmitGuess(FString);
 private:
-    int MyCurrentTry;
-    int MyMaxTries;
+    int32 MyCurrentTry;
+    int32 MyMaxTries;
+    FString MyHiddenWord;
 
 
 };
 
 
-#endif //BULLCOWGAME_FBULLCOWGAME_H
