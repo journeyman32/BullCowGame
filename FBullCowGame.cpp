@@ -18,8 +18,18 @@ int32 FBullCowGame::GetMaxTries() const {
     return MyMaxTries;
 }
 
-bool FBullCowGame::CheckGuessValidity(FString) const {
-    return false;
+EWordStatus FBullCowGame::CheckGuessValidity(FString Guess) const {
+
+    if (!IsIsogram(Guess)) {
+        return EWordStatus::Not_Isogram;
+    } else if (!IsLowerCase(Guess)){
+        return EWordStatus::Not_Lowercase;
+    } else if (Guess.length() != GetHiddenWordLength()){
+        return EWordStatus::Wrong_Length;
+    }else{
+        return EWordStatus::Ok;
+    }
+
 }
 
 bool FBullCowGame::IsGameWon() const {
@@ -34,7 +44,7 @@ FBullCowGame::FBullCowGame() {
     Reset();
 }
 
-FBullCowCount FBullCowGame::SubmitGuess(FString Guess) {
+FBullCowCount FBullCowGame::SubmitValidGuess(FString Guess) {
     //increment the turn number
     MyCurrentTry++;
 
@@ -64,4 +74,26 @@ FBullCowCount FBullCowGame::SubmitGuess(FString Guess) {
 
 int32 FBullCowGame::GetHiddenWordLength() const {
     return MyHiddenWord.length();
+}
+//cat
+bool FBullCowGame::IsIsogram(FString basic_string) const {
+    for(int x=0; x < basic_string.length(); x++){
+        //c
+        char l = basic_string[x];
+        int TotalCount = 0;
+        for(int y=0; y < basic_string.length(); y++){
+            if(basic_string[y] == l){
+                TotalCount++;
+            }
+        }
+        if(TotalCount > 1){
+            return false;
+        }
+
+    }
+    return true;
+}
+
+bool FBullCowGame::IsLowerCase(FString basic_string) const {
+    return true;
 }
