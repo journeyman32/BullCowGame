@@ -3,13 +3,18 @@
 //
 
 #include "FBullCowGame.h"
+#include <map>
+
+#define TMap std::map
+
 
 void FBullCowGame::Reset() {
-    constexpr int32 MAX_TRIES = 8;
+    constexpr int32 MAX_TRIES = 3;
     const FString HIDDEN_WORD = "ant";
     MyMaxTries = MAX_TRIES;
     MyHiddenWord = HIDDEN_WORD;
     MyCurrentTry = 1;
+    bGameIsWon = false;
     return;
 }
 
@@ -33,7 +38,7 @@ EWordStatus FBullCowGame::CheckGuessValidity(FString Guess) const {
 }
 
 bool FBullCowGame::IsGameWon() const {
-    return false;
+    return bGameIsWon;
 }
 
 int32 FBullCowGame::GetCurrentTry() const {
@@ -69,6 +74,12 @@ FBullCowCount FBullCowGame::SubmitValidGuess(FString Guess) {
             }
         }
     }
+    if(BullCowCount.Bulls == HiddenWordLength){
+        bGameIsWon = true;
+    }
+    else{
+        bGameIsWon = false;
+    }
     return BullCowCount;
 }
 
@@ -77,23 +88,27 @@ int32 FBullCowGame::GetHiddenWordLength() const {
 }
 //cat
 bool FBullCowGame::IsIsogram(FString basic_string) const {
-    for(int x=0; x < basic_string.length(); x++){
-        //c
-        char l = basic_string[x];
-        int TotalCount = 0;
-        for(int y=0; y < basic_string.length(); y++){
-            if(basic_string[y] == l){
-                TotalCount++;
-            }
-        }
-        if(TotalCount > 1){
-            return false;
-        }
 
+    TMap<char,bool> LetterSeen;
+    for(auto Letter: basic_string){
+        Letter = tolower(Letter);
+        if(LetterSeen[Letter]){
+            return false;
+        }else{
+            LetterSeen[Letter] = true;
+        }
     }
     return true;
 }
 
 bool FBullCowGame::IsLowerCase(FString basic_string) const {
+
+    for(int i=0; i < basic_string.length(); i++) {
+        if(std::tolower(basic_string[i]) != basic_string[i]) {
+            return false;
+        }
+    }
+
     return true;
+
 }

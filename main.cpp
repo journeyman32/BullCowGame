@@ -9,6 +9,8 @@ FText GetValidGuess();
 void PlayGame();
 bool AskToPlayAgain();
 
+void EndGameMessage();
+
 FBullCowGame BCGame;
 
 int main() {
@@ -25,7 +27,7 @@ int main() {
 }
 
 bool AskToPlayAgain() {
-    std::cout << "Do you want to play again?";
+    std::cout << "Do you want to play again with the same word?";
     FText response = "";
     getline(std::cin, response);
     return response[0] == 'y' || response[0] == 'Y' ? true : false;
@@ -35,14 +37,26 @@ void PlayGame() {
     BCGame.Reset();
     int32 MaxTries = BCGame.GetMaxTries();
 
-    for(int32 count = 1; count <=MaxTries; count++){
+    while(!BCGame.IsGameWon() && BCGame.GetCurrentTry() <= MaxTries){
         FText Guess = GetValidGuess();
 
         FBullCowCount BullCowCount = BCGame.SubmitValidGuess(Guess);
 
         std::cout << "Bulls: " << BullCowCount.Bulls << " Cows: " << BullCowCount.Cows << std::endl;
     }
+
+    EndGameMessage();
+
     return;
+}
+
+void EndGameMessage() {
+    if(BCGame.IsGameWon()){
+        std::cout << "You won!\n";
+    }
+    else{
+        std::cout << "Sorry maybe next time.\n";
+    }
 }
 
 void PrintIntro() {
